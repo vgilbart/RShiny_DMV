@@ -11,7 +11,8 @@ library(shiny)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-
+    output$value <- renderPrint({ input$gene_origin_bank })
+    
     output$distPlot <- renderPlot({
 
         # generate bins based on input$bins from ui.R
