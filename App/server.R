@@ -10,17 +10,35 @@
 library(shiny)
 
 # Define server logic required to draw a histogram
-shinyServer(function(input, output) {
+shinyServer(function(session, input, output) {
 
-    output$distPlot <- renderPlot({
-
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
-
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white')
-
+    #-- INPUT TAB
+    
+    # Retrieve dataframe from file
+    dfGeneFile = reactive({
+        validate( need(input$gene_file, "Please upload a file") )
+        file = input$gene_file
+        print(file)
+        df = read.table(file$datapath, header = T)
     })
+    
+    
+    output$gene_table <- renderDataTable({
+        dfGeneFile()
+    })
+    
+    
+    
+    #-- WHOLE DATA INSPECTION TAB
+    
+    
+    #-- GO TERMS ENRICHMENT TAB
+    
+    
+    #-- PATHWAY ENRICHMENT TAB
+    
+    
+    #-- PROTEIN DOMAIN ENRICHMENT TAB
+    
 
 })
