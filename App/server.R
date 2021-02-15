@@ -22,7 +22,8 @@ shinyServer(function(session, input, output) {
 
         # draw the histogram with the specified number of bins
         hist(x, breaks = bins, col = 'darkgray', border = 'white')
-
+    })
+    
     #-- INPUT TAB
     
     # Retrieve dataframe from file
