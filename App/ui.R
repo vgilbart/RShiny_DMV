@@ -29,7 +29,7 @@ shinyUI(navbarPage("Shiny DMV",
                      
                      
                      # Button to upload an exemple file
-                     actionButton("exemple_button", "Run the app with an exemple file")
+                     # actionButton("load_exemple", "Run the app with an exemple file")
                      
                  ),
                  

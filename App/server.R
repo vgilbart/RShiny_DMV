@@ -16,11 +16,23 @@ shinyServer(function(session, input, output) {
     
     # Retrieve dataframe from file
     dfGeneFile = reactive({
-        validate( need(input$gene_file, "Please upload a file") )
+        validate( need(input$gene_file, "Please upload a csv or tsv file") )
         file = input$gene_file
         print(file)
-        df = read.table(file$datapath, header = T)
+    
+        # Check if csv of tsv
+        file_extension = strsplit(file$datapath, split="\\.")[[1]][-1]
+        if (file_extension == "csv"){
+            separator = ','
+        } else if (file_extension == "tsv"){
+            separator = '\t'
+        } # else { RAISE ERROR }
+        
+        df = read.table(file$datapath, header = T, sep = separator)
+        return(df)
     })
+    
+    
     
     
     output$gene_table <- renderDataTable({
