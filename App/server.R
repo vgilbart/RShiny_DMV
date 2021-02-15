@@ -9,10 +9,11 @@
 
 library(shiny)
 
-# Define server logic required to draw a histogram
-shinyServer(function(input, output) {
+
+shinyServer(function(session, input, output) {
+
     output$value <- renderPrint({ input$gene_origin_bank })
-    
+   
     output$distPlot <- renderPlot({
 
         # generate bins based on input$bins from ui.R
@@ -22,6 +23,45 @@ shinyServer(function(input, output) {
         # draw the histogram with the specified number of bins
         hist(x, breaks = bins, col = 'darkgray', border = 'white')
 
+    #-- INPUT TAB
+    
+    # Retrieve dataframe from file
+    dfGeneFile = reactive({
+        validate( need(input$gene_file, "Please upload a csv or tsv file") )
+        file = input$gene_file
+        print(file)
+    
+        # Check if csv of tsv
+        file_extension = strsplit(file$datapath, split="\\.")[[1]][-1]
+        if (file_extension == "csv"){
+            separator = ','
+        } else if (file_extension == "tsv"){
+            separator = '\t'
+        } # else { RAISE ERROR }
+        
+        df = read.table(file$datapath, header = T, sep = separator)
+        return(df)
     })
+    
+    
+    
+    
+    output$gene_table <- renderDataTable({
+        dfGeneFile()
+    })
+    
+    
+    
+    #-- WHOLE DATA INSPECTION TAB
+    
+    
+    #-- GO TERMS ENRICHMENT TAB
+    
+    
+    #-- PATHWAY ENRICHMENT TAB
+    
+    
+    #-- PROTEIN DOMAIN ENRICHMENT TAB
+    
 
 })

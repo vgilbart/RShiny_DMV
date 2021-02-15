@@ -15,10 +15,12 @@ shinyUI(navbarPage("Shiny DMV",
     tabPanel("Input", 
              sidebarLayout(
                 
+                 # Input
                  sidebarPanel(
                      
-                     # Download file (GeneName, GeneID, baseMean, log2FC, pval, adj) in TSV or CSV
-                     
+                     # Select file (GeneName, GeneID, baseMean, log2FC, pval, adj) in TSV or CSV
+                     fileInput("gene_file", "Select a TSV or CSV File"),
+                     # Without or without header
                      
                      # Gene origin (NCBI or Ensembl)
                      radioButtons("gene_origin_bank", label = h3("Gene origin"),
@@ -32,20 +34,13 @@ shinyUI(navbarPage("Shiny DMV",
                      
                      
                      # Button to upload an exemple file
+                     # actionButton("load_exemple", "Run the app with an exemple file")
                      
-                     
-                     # Un exemple à enlever ASAP
-                     sliderInput("bins",
-                                 "Number of bins:",
-                                 min = 1,
-                                 max = 50,
-                                 value = 30)
                  ),
                  
                  # Show a plot of the generated distribution
                  mainPanel(
-                     # Un exemple à enlever ASAP
-                     plotOutput("distPlot")
+                     dataTableOutput("gene_table")
                  )
              
              ) # End of sidebarLayout
@@ -59,17 +54,17 @@ shinyUI(navbarPage("Shiny DMV",
     tabPanel("GO Terms enrichment", 
              
              
-    ), # End of sidebarLayout
+            ), # End of sidebarLayout
     
     tabPanel("Pathway enrichment", 
              
              
-    ), # End of sidebarLayout
+            ), # End of sidebarLayout
     
     tabPanel("Protein Domain enrichment", 
              
              
-    ) # End of sidebarLayout
+            ) # End of sidebarLayout
     
     
 
