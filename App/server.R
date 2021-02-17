@@ -35,7 +35,7 @@ shinyServer(function(session, input, output) {
         # Check if csv of tsv
         file_extension = strsplit(file$datapath, split="\\.")[[1]][-1]
         if (file_extension == "csv"){
-            separator = ','
+            separator = ';'
         } else if (file_extension == "tsv"){
             separator = '\t'
         } # else { RAISE ERROR }
