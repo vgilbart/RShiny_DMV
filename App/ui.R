@@ -23,7 +23,7 @@ shinyUI(navbarPage("Shiny DMV",
                      # Without or without header
                      
                      # Gene origin (NCBI or Ensembl)
-                     radioButtons("gene_origin_bank", label = h3("Gene origin"),
+                     radioButtons("gene_origin_bank", label = 3("Gene origin"),
                                   choices = list("NCBI" = 1, "Ensembl" = 2), 
                                   selected = 1),
                      
@@ -38,7 +38,7 @@ shinyUI(navbarPage("Shiny DMV",
                      
                  ),
                  
-                 # Show a plot of the generated distribution
+                 # Show data table uploaded
                  mainPanel(
                      dataTableOutput("gene_table")
                  )
@@ -67,28 +67,27 @@ shinyUI(navbarPage("Shiny DMV",
                                  value = 0.5),
                  ),
                  
-                 # Show a plot of the generated distribution
                  mainPanel(
                  )
                  
              ) # End of sidebarLayout
              
-             ), # End of sidebarLayout
+             ), # End of tabPanel
     
     tabPanel("GO Terms enrichment", 
              
              
-            ), # End of sidebarLayout
+            ), # End of tabPanel
     
     tabPanel("Pathway enrichment", 
              
              
-            ), # End of sidebarLayout
+            ), # End of tabPanel
     
     tabPanel("Protein Domain enrichment", 
              
              
-            ) # End of sidebarLayout
+            ) # End of tabPanel
     
     
 
