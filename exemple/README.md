@@ -11,7 +11,9 @@ name_file=GSE165691_DEG_result_table
 # echo : prints the header
 # awk : prints column of interest if they are non-empty
 # tail : removes the "original" header of the file
-echo "GeneName;ID;baseMean;log2FC;pval;padj" ; awk -F ';' '{if ($6 && $1 && $13 && $2 && $3 && $4) print $6,$1,$13,$2,$3,$4;}' FS=';' OFS=';' $name_file.csv | tail -n+2 > exemple.csv
+echo "GeneName;ID;baseMean;log2FC;pval;padj" > exemple.csv ; awk -F ';' '{if ($6 && $1 && $13 && $2 && $3 && $4) print $6,$1,$13,$2,$3,$4;}' FS=';' OFS=';' $name_file.csv | tail -n+2 >> exemple.csv
+
+
 
 ```
 
