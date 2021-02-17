@@ -23,7 +23,7 @@ shinyUI(navbarPage("Shiny DMV",
                      # Without or without header
                      
                      # Gene origin (NCBI or Ensembl)
-                     radioButtons("gene_origin_bank", label = 3("Gene origin"),
+                     radioButtons("gene_origin_bank", label = h3("Gene origin"),
                                   choices = list("NCBI" = 1, "Ensembl" = 2), 
                                   selected = 1),
                      
