@@ -27,7 +27,7 @@ shinyUI(navbarPage("Shiny DMV",
                                   choices = list("NCBI" = 1, "Ensembl" = 2), 
                                   selected = 1),
                      
-                     textInput("gene_origin_id", "Gene Id", value = "", width = '400px'),
+                     textInput("species", "Choice of species", value = "", width = '400px'),
                      
                      
                      # Choice of species
@@ -69,7 +69,6 @@ shinyUI(navbarPage("Shiny DMV",
                  
                  # Show a plot of the generated distribution
                  mainPanel(
-                     dataTableOutput("gene_table")
                  )
                  
              ) # End of sidebarLayout
