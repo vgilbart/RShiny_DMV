@@ -47,7 +47,32 @@ shinyUI(navbarPage("Shiny DMV",
              ), # End of tabPanel
              
     tabPanel("Whole data inspection", 
-            
+             sidebarLayout(
+                 
+                 # Input
+                 sidebarPanel(
+                     # Choice of method
+                     radioButtons("method_choice", label = h3("Method"),
+                                  choices = list("SEA" = 1, "GSEA" = 2), 
+                                  selected = 1),
+                     
+                     # Choice of pvalue
+                     radioButtons("pvalue_method_choice", label = h3("Statistics method"),
+                                  choices = list("p-value" = 1, "p-adj" = 2), 
+                                  selected = 1),
+                     
+                     # Side bar
+                     sliderInput("p-value", "P-value :",
+                                 min = 0, max = 1,
+                                 value = 0.5),
+                 ),
+                 
+                 # Show a plot of the generated distribution
+                 mainPanel(
+                     dataTableOutput("gene_table")
+                 )
+                 
+             ) # End of sidebarLayout
              
              ), # End of sidebarLayout
     
