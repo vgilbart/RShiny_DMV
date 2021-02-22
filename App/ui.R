@@ -19,7 +19,7 @@ shinyUI(navbarPage("Shiny DMV",
           # Input
           sidebarPanel(
               
-              # Select file (GeneName, GeneID, baseMean, log2FC, pval, adj) in TSV or CSV
+              # Select file (GeneName, GeneID, baseMean, log2FC, pval, padj) in TSV or CSV
               fileInput("gene_file", "Select a TSV or CSV File", 
                         accept = c("text/csv", 
                                    "text/comma-separated-values,text/plain",
