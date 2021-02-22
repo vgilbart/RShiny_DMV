@@ -20,7 +20,7 @@ cat exemple.csv | tr ',' '.' > temp.csv; mv temp.csv exemple.csv
 
 # Create exemple.tsv from exemple.csv
 cat exemple.csv | tr ';' ',' > temp.csv; mv temp.csv exemple.csv
-cat exemple.csv | tr ';' '\t' > exemple.tsv 
+cat exemple.csv | tr ',' '\t' > exemple.tsv 
 
 
 
