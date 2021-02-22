@@ -65,17 +65,16 @@ shinyServer(function(session, input, output) {
     
     # Side bar p-value
     observeEvent(input$pvalue_method_choice, {
-    if (input$pvalue_method_choice == 2){
-    updateSliderInput(session, "pvalue", "Padj",
+        if (input$pvalue_method_choice == 2){
+                updateSliderInput(session, "pvalue", "Padj",
                 min = 0, max = 1,
                 value = 0.5)
-    }
-    else if (input$pvalue_method_choice == 1){
+        }
+        else if (input$pvalue_method_choice == 1){
             updateSliderInput(session, "pvalue",  "Pvalue",
                               min = 0, max = 1,
                               value = 0.5)
         }
-        
     })
     
     plotVolcano <- reactive({
