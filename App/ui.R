@@ -9,6 +9,7 @@
 
 library(shiny)
 library(ggplot2)
+library(ggpubr)
 
 # Define UI for application that draws a histogram
 shinyUI(navbarPage("Shiny DMV", 
@@ -70,12 +71,10 @@ shinyUI(navbarPage("Shiny DMV",
                           value = c(-1,1)),
           ),
           
-          # VolcanoPlot
-          
-          #
-          
+          # display of figures
           mainPanel(
               plotOutput("plot_Volcano"),
+              plotOutput("plot_MA")
           )
           
       ) # End of sidebarLayout

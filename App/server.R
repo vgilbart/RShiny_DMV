@@ -9,6 +9,7 @@
 
 library(shiny)
 library(ggplot2)
+library(ggpubr)
 
 shinyServer(function(session, input, output) {
 
@@ -77,6 +78,7 @@ shinyServer(function(session, input, output) {
         }
     })
     
+    # Construction of Volcano plot
     plotVolcano <- reactive({
         df=dfGeneFile()
         df$diffexpressed <- "NO regulated"
@@ -95,9 +97,34 @@ shinyServer(function(session, input, output) {
         return(p)
     })  
     
-    #variable
+    # Construction of MA plot
+    plot_MA <- reactive({
+        df=dfGeneFile()
+        log2FoldChange=dfGeneFile$lof2FC
+        
+        p = ggmaplot(
+            data=df, fdr = 0.05, fc = 1.5,
+            genenames = as.vector(dfGeneFile$name),
+            alpha = 1,
+            font.label = c(12, "plain", "black"),
+            label.rectangle = FALSE,
+            palette = c("#B31B21", "#1465AC", "darkgray"),
+            top = 15,
+            select.top.method = c("padj", "fc"),
+            label.select = NULL,
+            main = "MAPlot",
+            xlab = "Log2 mean expression",
+            ylab = "Log2 fold change") +
+            theme(plot.title = element_text(color="black", size=20, face="bold.italic", hjust = 0.5))
+    })
+    
+    #variables
     output$plot_Volcano <- renderPlot(
         plotVolcano()
+    )
+    
+    output$plot_MA <- renderPlot(
+        plot_MA()
     )
 
 
