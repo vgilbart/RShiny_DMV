@@ -93,8 +93,6 @@ shinyServer(function(session, input, output) {
             geom_hline(yintercept=-log10(input$p_value), col="red") +
             theme(plot.title = element_text(color="black", size=20, face="bold.italic", hjust = 0.5)) +
             scale_colour_manual(values = mycolors)
-        print(input$pvalue)
-        print()
         return(p)
     })  
     
