@@ -8,7 +8,7 @@
 #
 
 library(shiny)
-
+library(ggplot2)
 
 shinyServer(function(session, input, output) {
 
@@ -43,11 +43,23 @@ shinyServer(function(session, input, output) {
         dfGeneFile()
     })
     
-    
+
     
     #-- WHOLE DATA INSPECTION TAB
     
     
+    plotVolcano <- reactive({
+        df=dfGeneFile()
+        p=ggplot(data=df, aes(x=log2FC, y=pval)) + geom_point()
+        return(p)
+    })    
+
+    #variable
+    output$plot_Volcano <- renderPlot(
+        plotVolcano()
+    )
+    
+
     #-- GO TERMS ENRICHMENT TAB
     
     

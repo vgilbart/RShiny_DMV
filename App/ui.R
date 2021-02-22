@@ -8,10 +8,11 @@
 #
 
 library(shiny)
+library(ggplot2)
 
 # Define UI for application that draws a histogram
 shinyUI(navbarPage("Shiny DMV", 
-
+    
     tabPanel("Input", 
              sidebarLayout(
                 
@@ -55,10 +56,6 @@ shinyUI(navbarPage("Shiny DMV",
                  
                  # Input
                  sidebarPanel(
-                     # Choice of method
-                     radioButtons("method_choice", label = h3("Method"),
-                                  choices = list("SEA" = 1, "GSEA" = 2), 
-                                  selected = 1),
                      
                      # Choice of pvalue
                      radioButtons("pvalue_method_choice", label = h3("Statistics method"),
@@ -71,7 +68,12 @@ shinyUI(navbarPage("Shiny DMV",
                                  value = 0.5),
                  ),
                  
+                 # VolcanoPlot
+                  
+                 #
+                 
                  mainPanel(
+                     plotOutput("plot_Volcano"),
                  )
                  
              ) # End of sidebarLayout
@@ -84,6 +86,10 @@ shinyUI(navbarPage("Shiny DMV",
             ), # End of tabPanel
     
     tabPanel("Pathway enrichment", 
+             # Choice of method
+             radioButtons("method_choice", label = h3("Method"),
+                          choices = list("SEA" = 1, "GSEA" = 2), 
+                          selected = 1),
              
              
             ), # End of tabPanel
