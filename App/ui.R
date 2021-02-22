@@ -59,7 +59,7 @@ shinyUI(navbarPage("Shiny DMV",
                                   selected = 1),
                      
                      # Side bar p-value
-                     sliderInput("p-value", "P-value :",
+                     sliderInput("p_value", "P_value :",
                                  min = 0, max = 1,
                                  value = 0.5),
                      
