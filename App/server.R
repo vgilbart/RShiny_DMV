@@ -23,21 +23,29 @@ shinyServer(function(session, input, output) {
         if(input$load_exemple == TRUE) {
             file = paste(dirname(getwd()), "exemple/exemple.csv", sep ="/")
         } else { 
-            validate( need(input$gene_file, "Please upload a csv or tsv file") )
+            shiny::validate( need(input$gene_file, "Please upload a csv or tsv file") )
             file = input$gene_file$datapath
         }
         print(file)
 
         # Check if file is csv of tsv
         file_extension = strsplit(file, split="\\.")[[1]][-1]
-        validate(need(file_extension == "csv" || file_extension == "tsv" , "Please upload a .csv or .tsv file only") )
+        shiny::validate(need(file_extension == "csv" || file_extension == "tsv" , "Please upload a .csv or .tsv file only") )
         if (file_extension == "csv"){
             separator = ','
         } else if (file_extension == "tsv"){
             separator = '\t'
         } 
-        
         df = read.table(file, header = T, sep = separator)
+    
+        # Check if file has the expected columns
+        shiny::validate(
+            # max 6 columns 
+            need(ncol(df) <= 6, "Please, check the needed format with the exemple file. \nYour data has too many columns."),
+            # baseMean column is optional
+            need(all(c("GeneName", "ID", "log2FC", "pval", "padj") %in% colnames(df)), 
+                 "Please, check the needed format with the exemple file. \nYou do not have the expected data columns.")
+        )
         
         return(df)
     })
