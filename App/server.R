@@ -63,6 +63,21 @@ shinyServer(function(session, input, output) {
     
     #-- WHOLE DATA INSPECTION TAB
     
+    # Side bar p-value
+    observeEvent(input$pvalue_method_choice, {
+    if (input$pvalue_method_choice == 2){
+    updateSliderInput(session, "pvalue", "Padj",
+                min = 0, max = 1,
+                value = 0.5)
+    }
+    else if (input$pvalue_method_choice == 1){
+            updateSliderInput(session, "pvalue",  "Pvalue",
+                              min = 0, max = 1,
+                              value = 0.5)
+        }
+        
+    })
+    
     plotVolcano <- reactive({
         df=dfGeneFile()
         df$diffexpressed <- "NO regulated"
@@ -78,7 +93,8 @@ shinyServer(function(session, input, output) {
             geom_hline(yintercept=-log10(input$p_value), col="red") +
             theme(plot.title = element_text(color="black", size=20, face="bold.italic", hjust = 0.5)) +
             scale_colour_manual(values = mycolors)
-
+        print(input$pvalue)
+        print()
         return(p)
     })  
     
@@ -86,7 +102,7 @@ shinyServer(function(session, input, output) {
     output$plot_Volcano <- renderPlot(
         plotVolcano()
     )
-    
+
 
     #-- GO TERMS ENRICHMENT TAB
     
