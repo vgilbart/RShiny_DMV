@@ -19,31 +19,39 @@ shinyServer(function(session, input, output) {
     
     # Retrieve dataframe from file
     dfGeneFile = reactive({
-        validate( need(input$gene_file, "Please upload a csv or tsv file") )
-        file = input$gene_file
+        # Get name of exemple or loaded file
+        if(input$load_exemple == TRUE) {
+            file = paste(dirname(getwd()), "exemple/exemple.csv", sep ="/")
+        } else { 
+            validate( need(input$gene_file, "Please upload a csv or tsv file") )
+            file = input$gene_file$datapath
+        }
         print(file)
-        
-        # Check if csv of tsv
-        file_extension = strsplit(file$datapath, split="\\.")[[1]][-1]
-        validate(need(file_extension == "csv" || file_extension == "tsv" , "Please upload a .csv or .tsv only") )
-        
+
+        # Check if file is csv of tsv
+        file_extension = strsplit(file, split="\\.")[[1]][-1]
+        validate(need(file_extension == "csv" || file_extension == "tsv" , "Please upload a .csv or .tsv file only") )
         if (file_extension == "csv"){
             separator = ','
         } else if (file_extension == "tsv"){
             separator = '\t'
         } 
         
-        df = read.table(file$datapath, header = T, sep = separator)
+        df = read.table(file, header = T, sep = separator)
         
         return(df)
     })
 
     
-    output$gene_table <- renderDataTable({
-        dfGeneFile()
-    })
+    output$gene_table <- renderDataTable(
+        dfGeneFile(), 
+        options = list(pageLength = 10, # Number of rows of datatable 
+                      lengthMenu = c(5, 10, 25, 50) # Choice of number of rows
+                      )
+    )
     
 
+    
     
     #-- WHOLE DATA INSPECTION TAB
     
