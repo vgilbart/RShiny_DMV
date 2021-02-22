@@ -54,9 +54,9 @@ shinyUI(navbarPage("Shiny DMV",
                                 sidebarPanel(
                                     
                                     # Choice of pvalue
-                                    radioButtons("pvalue_method_choice", label = h3("Statistics method"),
+                                    radioButtons("method_choice", label = h3("Statistics method"),
                                                  choices = list("p-value" = 1, "p-adj" = 2), 
-                                                 selected = 1),
+                                                 selected = 2),
                                     
                                     # Side bar p-value
                                     
@@ -65,9 +65,9 @@ shinyUI(navbarPage("Shiny DMV",
                                                 value = 0.5),
                                     
                                     # Side bar fold change
-                                    sliderInput("Fold_change", "Fold Change :",
-                                                min = -10, max = 10,
-                                                value = c(-5,5)),
+                                    sliderInput("fold_change", "Fold Change :",
+                                                min = -5, max = 5,
+                                                value = c(-1,1)),
                                 ),
                                 
                                 # VolcanoPlot
