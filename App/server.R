@@ -80,16 +80,16 @@ shinyServer(function(session, input, output) {
     plotVolcano <- reactive({
         df=dfGeneFile()
         df$diffexpressed <- "NO regulated"
-        df$diffexpressed[df$log2FC > 0.6 & df$pval < 0.05] <- "UP regulated"
-        df$diffexpressed[df$log2FC < -0.6 & df$pval < 0.05] <- "DOWN regulated"
+        df$diffexpressed[df$log2FC > input$Fold_change[2] & df$pval < input$p_value] <- "UP regulated"
+        df$diffexpressed[df$log2FC < input$Fold_change[2] & df$pval < input$p_value] <- "DOWN regulated"
         mycolors <- c("blue", "gray", "red")
         
         p = ggplot(data=df, aes(x=log2FC, y=-log10(pval), col=diffexpressed)) + 
             geom_point() + 
             theme_minimal() + 
             ggtitle("Volcano Plot") + 
-            geom_vline(xintercept=c(-0.6, 0.6), col="red") +
-            geom_hline(yintercept=-log10(0.05), col="red") +
+            geom_vline(xintercept=c(input$Fold_change[1], input$Fold_change[2]), col="red") +
+            geom_hline(yintercept=-log10(input$p_value), col="red") +
             theme(plot.title = element_text(color="black", size=20, face="bold.italic", hjust = 0.5)) +
             scale_colour_manual(values = mycolors)
         return(p)
