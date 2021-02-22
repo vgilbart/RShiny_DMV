@@ -25,13 +25,16 @@ shinyServer(function(session, input, output) {
         
         # Check if csv of tsv
         file_extension = strsplit(file$datapath, split="\\.")[[1]][-1]
+        validate(need(file_extension == "csv" || file_extension == "tsv" , "Please upload a .csv or .tsv only") )
+        
         if (file_extension == "csv"){
-            separator = ';'
+            separator = ','
         } else if (file_extension == "tsv"){
             separator = '\t'
-        } # else { RAISE ERROR }
+        } 
         
         df = read.table(file$datapath, header = T, sep = separator)
+        
         return(df)
     })
 

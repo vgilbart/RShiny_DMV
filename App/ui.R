@@ -11,9 +11,7 @@ library(shiny)
 
 # Define UI for application that draws a histogram
 shinyUI(navbarPage("Shiny DMV", 
-              
-=======
-    
+
     tabPanel("Input", 
              sidebarLayout(
                 
@@ -21,7 +19,11 @@ shinyUI(navbarPage("Shiny DMV",
                  sidebarPanel(
                      
                      # Select file (GeneName, GeneID, baseMean, log2FC, pval, adj) in TSV or CSV
-                     fileInput("gene_file", "Select a TSV or CSV File"),
+                     fileInput("gene_file", "Select a TSV or CSV File", 
+                               accept = c("text/csv", 
+                                          "text/comma-separated-values,text/plain",
+                                          ".csv",
+                                          ".tsv")),
                      # Without or without header
                      
                      # Gene origin (NCBI or Ensembl)
@@ -92,7 +94,5 @@ shinyUI(navbarPage("Shiny DMV",
             ) # End of tabPanel
     
     
-
-
 ))
 
