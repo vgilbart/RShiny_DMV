@@ -55,15 +55,22 @@ shinyServer(function(session, input, output) {
     
     #-- WHOLE DATA INSPECTION TAB
     
-    
     plotVolcano <- reactive({
         df=dfGeneFile()
-        p=ggplot(data=df, aes(x=log2FC, y=-log10(pval))) + 
+        df$diffexpressed <- "NO regulated"
+        df$diffexpressed[df$log2FC > 0.6 & df$pval < 0.05] <- "UP regulated"
+        df$diffexpressed[df$log2FC < -0.6 & df$pval < 0.05] <- "DOWN regulated"
+        mycolors <- c("blue", "gray", "red")
+        
+        p = ggplot(data=df, aes(x=log2FC, y=-log10(pval), col=diffexpressed)) + 
+            geom_point() + 
+            theme_minimal() + 
             ggtitle("Volcano Plot") + 
-            geom_point() +
             geom_vline(xintercept=c(-0.6, 0.6), col="red") +
             geom_hline(yintercept=-log10(0.05), col="red") +
-            theme(plot.title = element_text(color="black", size=20, face="bold.italic", hjust = 0.5))
+            theme(plot.title = element_text(color="black", size=20, face="bold.italic", hjust = 0.5)) +
+            scale_colour_manual(values = mycolors)
+
         return(p)
     })  
     
