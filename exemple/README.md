@@ -12,8 +12,9 @@ name_file=GSE165691_DEG_result_table
 # Create exemple.csv from GSE165691_DEG_result_table.csv
 # echo : prints the header
 # awk : prints column of interest if they are non-empty
-# tail : removes the "original" header of the file
-echo "GeneName;ID;baseMean;log2FC;pval;padj" > exemple.csv ; awk -F ';' '{if ($6 && $1 && $13 && $2 && $3 && $4) print $6,$1,$13,$2,$3,$4;}' FS=';' OFS=';' $name_file.csv | tail -n+2 >> exemple.csv
+# tail : removes the "original" header of the file 
+# and remove extreme values to make an easy exemple (pvalue < 1E-70)
+echo "GeneName;ID;baseMean;log2FC;pval;padj" > exemple.csv ; awk -F ';' '{if ($6 && $1 && $13 && $2 && $3 && $4) print $6,$1,$13,$2,$3,$4;}' FS=';' OFS=';' $name_file.csv | tail -n+6 >> exemple.csv
 
 # Use . in numeric columns instead of ,
 cat exemple.csv | tr ',' '.' > temp.csv; mv temp.csv exemple.csv
@@ -21,8 +22,6 @@ cat exemple.csv | tr ',' '.' > temp.csv; mv temp.csv exemple.csv
 # Create exemple.tsv from exemple.csv
 cat exemple.csv | tr ';' ',' > temp.csv; mv temp.csv exemple.csv
 cat exemple.csv | tr ',' '\t' > exemple.tsv 
-
-
 
 # Create very small datasets
 head exemple.csv > small_exemple.csv
