@@ -11,9 +11,10 @@ library(shiny)
 
 
 shinyServer(function(session, input, output) {
-    
+
     output$value <- renderPrint({ input$gene_origin_bank })
-    
+
+
     #-- INPUT TAB
     
     # Retrieve dataframe from file
@@ -33,8 +34,7 @@ shinyServer(function(session, input, output) {
         df = read.table(file$datapath, header = T, sep = separator)
         return(df)
     })
-    
-    
+
     
     output$gene_table <- renderDataTable({
         dfGeneFile()
@@ -53,5 +53,6 @@ shinyServer(function(session, input, output) {
     
     #-- PROTEIN DOMAIN ENRICHMENT TAB
     
-    
+
 })
+
