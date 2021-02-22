@@ -32,15 +32,11 @@ shinyUI(navbarPage("Shiny DMV",
                                   choices = list("NCBI" = 1, "Ensembl" = 2), 
                                   selected = 1),
                      
+                     # Choice of species
                      textInput("species", "Choice of species", value = "", width = '400px'),
                      
-                     
-                     # Choice of species
-                     
-                     
                      # Button to upload an exemple file
-                     # actionButton("load_exemple", "Run the app with an exemple file")
-                     
+                     checkboxInput("load_exemple", label = "Run the app with an exemple file", value = FALSE),
                  ),
                  
                  # Show data table uploaded
