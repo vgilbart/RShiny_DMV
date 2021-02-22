@@ -58,10 +58,15 @@ shinyServer(function(session, input, output) {
     
     plotVolcano <- reactive({
         df=dfGeneFile()
-        p=ggplot(data=df, aes(x=log2FC, y=pval)) + geom_point()
+        p=ggplot(data=df, aes(x=log2FC, y=-log10(pval))) + 
+            ggtitle("Volcano Plot") + 
+            geom_point() +
+            geom_vline(xintercept=c(-0.6, 0.6), col="red") +
+            geom_hline(yintercept=-log10(0.05), col="red") +
+            theme(plot.title = element_text(color="black", size=20, face="bold.italic", hjust = 0.5))
         return(p)
-    })    
-
+    })  
+    
     #variable
     output$plot_Volcano <- renderPlot(
         plotVolcano()
