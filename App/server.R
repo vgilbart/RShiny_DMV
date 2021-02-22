@@ -64,13 +64,13 @@ shinyServer(function(session, input, output) {
     #-- WHOLE DATA INSPECTION TAB
     
     # Side bar p-value
-    observeEvent(input$pvalue_method_choice, {
-        if (input$pvalue_method_choice == 2){
+    observeEvent(input$method_choice, {
+        if (input$method_choice == 2){
                 updateSliderInput(session, "pvalue", "Padj",
                 min = 0, max = 1,
                 value = 0.5)
         }
-        else if (input$pvalue_method_choice == 1){
+        else if (input$method_choice == 1){
             updateSliderInput(session, "pvalue",  "Pvalue",
                               min = 0, max = 1,
                               value = 0.5)
@@ -80,16 +80,16 @@ shinyServer(function(session, input, output) {
     plotVolcano <- reactive({
         df=dfGeneFile()
         df$diffexpressed <- "NO regulated"
-        df$diffexpressed[df$log2FC > input$Fold_change[2] & df$pval < input$p_value] <- "UP regulated"
-        df$diffexpressed[df$log2FC < input$Fold_change[2] & df$pval < input$p_value] <- "DOWN regulated"
+        df$diffexpressed[df$log2FC > input$fold_change[2]] <- "UP regulated"
+        df$diffexpressed[df$log2FC < input$fold_change[1]] <- "DOWN regulated"
         mycolors <- c("blue", "gray", "red")
         
         p = ggplot(data=df, aes(x=log2FC, y=-log10(pval), col=diffexpressed)) + 
             geom_point() + 
             theme_minimal() + 
             ggtitle("Volcano Plot") + 
-            geom_vline(xintercept=c(input$Fold_change[1], input$Fold_change[2]), col="red") +
-            geom_hline(yintercept=-log10(input$p_value), col="red") +
+            geom_vline(xintercept=c(input$fold_change[1], input$fold_change[2]), col="red") +
+            geom_hline(yintercept=-log10(input$pvalue), col="red") +
             theme(plot.title = element_text(color="black", size=20, face="bold.italic", hjust = 0.5)) +
             scale_colour_manual(values = mycolors)
         return(p)
