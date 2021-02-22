@@ -82,7 +82,7 @@ shinyServer(function(session, input, output) {
         df$diffexpressed <- "NO regulated"
         df$diffexpressed[df$log2FC > input$fold_change[2] & df$pval < -log10(input$pvalue)] <- "UP regulated"
         df$diffexpressed[df$log2FC < input$fold_change[1] & df$pval < -log10(input$pvalue)] <- "DOWN regulated"
-        mycolors <- c("blue", "black", "red")
+        mycolors <- c("blue", "gray", "red")
         
         p = ggplot(data=df, aes(x=log2FC, y=-log10(pval), col=diffexpressed)) + 
             geom_point() + 
