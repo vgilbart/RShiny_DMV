@@ -101,9 +101,10 @@ shinyServer(function(session, input, output) {
     plot_MA <- reactive({
         df=dfGeneFile()
         log2FoldChange=dfGeneFile$lof2FC
-        
+        #http://rpkgs.datanovia.com/ggpubr/reference/ggmaplot.html
         p = ggmaplot(
-            data=df, fdr = 0.05, fc = 1.5,
+            data=df, fdr = 0.05, 
+            fc = 1.5, #change barres horizontales
             genenames = as.vector(dfGeneFile$name),
             alpha = 1,
             font.label = c(12, "plain", "black"),
@@ -114,8 +115,9 @@ shinyServer(function(session, input, output) {
             label.select = NULL,
             main = "MAPlot",
             xlab = "Log2 mean expression",
-            ylab = "Log2 fold change") +
-            theme(plot.title = element_text(color="black", size=20, face="bold.italic", hjust = 0.5))
+            ylab = "Log2 fold change"),
+            ggtheme = ggplot2::theme_minimal()
+            #theme(plot.title = element_text(color="black", size=20, face="bold.italic", hjust = 0.5))
     })
     
     #variables
