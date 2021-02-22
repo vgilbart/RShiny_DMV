@@ -11,8 +11,7 @@ library(shiny)
 
 # Define UI for application that draws a histogram
 shinyUI(navbarPage("Shiny DMV", 
-              
-=======
+
     
     tabPanel("Input", 
              sidebarLayout(
