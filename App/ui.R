@@ -66,6 +66,10 @@ shinyUI(navbarPage("Shiny DMV",
                      sliderInput("p-value", "P-value :",
                                  min = 0, max = 1,
                                  value = 0.5),
+                     
+                     sliderInput("Fold_change", "Fold Change :",
+                        min = -10, max = 10,
+                        value = c(-5,5)),
                  ),
                  
                  # VolcanoPlot
