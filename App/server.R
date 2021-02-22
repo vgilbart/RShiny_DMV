@@ -11,7 +11,9 @@ library(shiny)
 
 
 shinyServer(function(session, input, output) {
-
+    
+    output$value <- renderPrint({ input$gene_origin_bank })
+    
     #-- INPUT TAB
     
     # Retrieve dataframe from file
@@ -19,7 +21,7 @@ shinyServer(function(session, input, output) {
         validate( need(input$gene_file, "Please upload a csv or tsv file") )
         file = input$gene_file
         print(file)
-    
+        
         # Check if csv of tsv
         file_extension = strsplit(file$datapath, split="\\.")[[1]][-1]
         if (file_extension == "csv"){
@@ -32,8 +34,6 @@ shinyServer(function(session, input, output) {
         return(df)
     })
     
-    # Gene origin
-    output$value <- renderPrint({ input$gene_origin_bank })
     
     
     output$gene_table <- renderDataTable({
@@ -53,5 +53,5 @@ shinyServer(function(session, input, output) {
     
     #-- PROTEIN DOMAIN ENRICHMENT TAB
     
-
+    
 })
