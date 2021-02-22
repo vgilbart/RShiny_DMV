@@ -58,11 +58,12 @@ shinyUI(navbarPage("Shiny DMV",
                                   choices = list("p-value" = 1, "p-adj" = 2), 
                                   selected = 1),
                      
-                     # Side bar
+                     # Side bar p-value
                      sliderInput("p-value", "P-value :",
                                  min = 0, max = 1,
                                  value = 0.5),
                      
+                     # Side bar fold change
                      sliderInput("Fold_change", "Fold Change :",
                         min = -10, max = 10,
                         value = c(-5,5)),
