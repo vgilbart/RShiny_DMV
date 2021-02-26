@@ -12,6 +12,7 @@ library(clusterProfiler)
 library(ggplot2)
 library(biomaRt)
 library(org.Mm.eg.db)
+library(ggpubr)
 
 shinyServer(function(session, input, output) {
 
@@ -70,8 +71,8 @@ shinyServer(function(session, input, output) {
     observeEvent(input$method_choice, {
         if (input$method_choice == 2){
                 updateSliderInput(session, "pvalue", "Padj",
-                min = 0, max = 1,
-                value = 0.5)
+                                min = 0, max = 1,
+                                value = 0.5)
         }
         else if (input$method_choice == 1){
             updateSliderInput(session, "pvalue",  "Pvalue",
@@ -80,14 +81,27 @@ shinyServer(function(session, input, output) {
         }
     })
     
+    # volcano plot
     plotVolcano <- reactive({
         df=dfGeneFile()
+        if (input$method_choice == 2){
+            pvalue_choice <- df$padj
+            pval_for_plot <- "padj"
+        }
+        else if (input$method_choice == 1){
+            pvalue_choice <- df$pval
+            pval_for_plot <- "pval"
+        }
+        
+        # print(input$method_choice)
+        # print(df$pvalue_choice)
+        # print(df$pval)
         df$diffexpressed <- "NO regulated"
-        df$diffexpressed[df$log2FC > input$fold_change[2] & df$pval < -log10(input$pvalue)] <- "UP regulated"
-        df$diffexpressed[df$log2FC < input$fold_change[1] & df$pval < -log10(input$pvalue)] <- "DOWN regulated"
+        df$diffexpressed[df$log2FC > input$fold_change[2] & pvalue_choice < -log10(input$pvalue)] <- "UP regulated"
+        df$diffexpressed[df$log2FC < input$fold_change[1] & pvalue_choice < -log10(input$pvalue)] <- "DOWN regulated"
         mycolors <- c("blue", "gray", "red")
         
-        p = ggplot(data=df, aes(x=log2FC, y=-log10(pval), col=diffexpressed)) + 
+        p = ggplot(data=df, aes(x=log2FC, y=-log10(get(pval_for_plot)), col=diffexpressed)) + 
             geom_point() + 
             theme_minimal() + 
             ggtitle("Volcano Plot") + 
@@ -98,11 +112,64 @@ shinyServer(function(session, input, output) {
         return(p)
     })  
     
-    #variable
+    # Construction of MA plot
+    plotMA <- reactive({
+        df=dfGeneFile()
+        
+        #pval choice
+        if (input$method_choice == 2){
+            df$padj <- df$padj
+            pval_for_plot <- "padj"
+        }
+        else if (input$method_choice == 1){
+            df$padj <- df$pval
+            pval_for_plot <- "pval"
+        }
+        
+        #FC change 
+        df$log2FoldChange=df$log2FC
+        fc_diff = input$fold_change[2] - input$fold_change[1]
+        #http://rpkgs.datanovia.com/ggpubr/reference/ggmaplot.html
+        p = ggmaplot(data=df, 
+                     title = "MA plot",
+                     fdr = 0.05, #Accepted false discovery rate for considering genes as differentially expressed.
+                     size = 0.4,
+                     fc = fc_diff, #change barres horizontales par intervalle fc
+                     palette = c("red", "blue", "gray"),
+                     genenames = as.vector(df$GeneName),
+                     legend = "top", 
+                     top = 20,
+                     label.rectangle = TRUE,
+                     font.label = c("bold", 11),
+                     font.legend = c("bold", 11),
+                     font.title = c(size=20, face="bold.italic", "black"),
+                     ggtheme = ggplot2::theme_minimal()) #void
+        return(p)
+    })
+    
+    # data table diff_expression
+    
+    # dfExpressionFile =  reactive({
+    #     dfGeneFile()
+    #     dfExpression = df[df$log2FC > input$fold_change[2] & pvalue_choice < -log10(input$pvalue)]
+    #     return(dfExpression)
+    # })
+    
+    #variables
     output$plot_Volcano <- renderPlot(
         plotVolcano()
     )
+    
+    output$plot_MA <- renderPlot(
+        plotMA()
+    )
 
+    # output$diff_expression_table <- renderDataTable(
+    #     dfExpressionFile(), 
+    #     options = list(pageLength = 5, # Number of rows of datatable 
+    #                    lengthMenu = c(5, 10, 25, 50) # Choice of number of rows
+    #                    )
+    # )
 
     #-- GO TERMS ENRICHMENT TAB
     

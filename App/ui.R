@@ -10,6 +10,7 @@
 library(shiny)
 library(clusterProfiler)
 library(ggplot2)
+library(ggpubr)
 
 # Define UI for application that draws a histogram
 shinyUI(navbarPage("Shiny DMV", 
@@ -20,7 +21,7 @@ shinyUI(navbarPage("Shiny DMV",
           # Input
           sidebarPanel(
               
-              # Select file (GeneName, GeneID, baseMean, log2FC, pval, adj) in TSV or CSV
+              # Select file (GeneName, GeneID, baseMean, log2FC, pval, padj) in TSV or CSV
               fileInput("gene_file", "Select a TSV or CSV File", 
                         accept = c("text/csv", 
                                    "text/comma-separated-values,text/plain",
@@ -68,15 +69,19 @@ shinyUI(navbarPage("Shiny DMV",
               # Side bar fold change
               sliderInput("fold_change", "Fold Change :",
                           min = -5, max = 5,
-                          value = c(-1,1)),
+                          value = c(-1,1),
+                          step = 0.01),
           ),
           
-          # VolcanoPlot
-          
-          #
+          # Plots
           
           mainPanel(
-              plotOutput("plot_Volcano"),
+              tabsetPanel(type = "tabs",
+                          tabPanel("volcano plot", plotOutput("plot_Volcano")),
+                          tabPanel("MA plot", plotOutput("plot_MA"))
+              ),
+              dataTableOutput("diff_expression_table")
+
           )
           
       ) # End of sidebarLayout
