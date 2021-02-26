@@ -70,12 +70,13 @@ shinyUI(navbarPage("Shiny DMV",
                           value = c(-1,1)),
           ),
           
-          # VolcanoPlot
-          
-          #
+          # Plots
           
           mainPanel(
-              plotOutput("plot_Volcano"),
+              tabsetPanel(type = "tabs",
+                          tabPanel("volcano plot", plotOutput("plot_Volcano")),
+                          tabPanel("MA plot", plotOutput("plot_MA"))
+              ) 
           )
           
       ) # End of sidebarLayout
