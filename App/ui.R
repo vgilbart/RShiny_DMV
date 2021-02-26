@@ -68,7 +68,8 @@ shinyUI(navbarPage("Shiny DMV",
               # Side bar fold change
               sliderInput("fold_change", "Fold Change :",
                           min = -5, max = 5,
-                          value = c(-1,1)),
+                          value = c(-1,1),
+                          step = 0.01),
           ),
           
           # Plots
