@@ -8,6 +8,7 @@
 #
 
 library(shiny)
+library(clusterProfiler)
 library(ggplot2)
 
 # Define UI for application that draws a histogram
@@ -83,17 +84,35 @@ shinyUI(navbarPage("Shiny DMV",
    ), # End of tabPanel
    
    tabPanel("GO Terms enrichment", 
-    
       sidebarLayout(
-        # Parameters
-        sidebarPanel(
         
-      
+        # Parameters
+          sidebarPanel(
+              h3("Parameters"), 
+              # Level of GO term
+              selectInput("level_GO", label = h4("Level of GO Terms"), 
+                          choices = list("Biological process" = "BP", "Cellular componant" = "CC", "Molecular fonction" = "MF"), 
+                          selected = "BP"),
+              
+              # Choice of method (SEA or GSEA)
+              radioButtons("method_GO", label = h4("Enrichment method"),
+                           choices = list("SEA" = 1, "GSEA" = 2), 
+                           selected = 1), 
+              
+              # Choice of pvalue
+              radioButtons("proba_GO", label = h4("Probability method"),
+                           choices = list("p-value" = "pvalue", "p-adj" = "p.adjust"), 
+                           selected = "p.adjust"),
         ),
       
-        # Show data table uploaded
+        # Show bar plot, arborescence and datatable
         mainPanel(
-        
+           tabsetPanel(type = "tabs",
+                       tabPanel("Dotplot", plotOutput("dotplot_GO")),
+                       #tabPanel("Enrichment map", plotOutput("enrichM_GO")),
+                       tabPanel("Table", dataTableOutput("table_GO"))
+           )
+          
         )
       
       ) # End of sidebarLayout
