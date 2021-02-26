@@ -78,7 +78,8 @@ shinyUI(navbarPage("Shiny DMV",
               tabsetPanel(type = "tabs",
                           tabPanel("volcano plot", plotOutput("plot_Volcano")),
                           tabPanel("MA plot", plotOutput("plot_MA"))
-              ) 
+              ),
+              dataTableOutput("diff_expression_table")
 
           )
           
