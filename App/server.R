@@ -110,35 +110,46 @@ shinyServer(function(session, input, output) {
     })  
     
     # Construction of MA plot
-    plot_MA <- reactive({
+    plotMA <- reactive({
         df=dfGeneFile()
-        log2FoldChange=dfGeneFile$lof2FC
+        
+        #pval choice
+        if (input$method_choice == 2){
+            df$padj <- df$padj
+            pval_for_plot <- "padj"
+        }
+        else if (input$method_choice == 1){
+            df$padj <- df$pval
+            pval_for_plot <- "pval"
+        }
+        
+        #FC change 
+        df$log2FoldChange=df$log2FC
+        fc_diff = input$fold_change[2] - input$fold_change[1]
         #http://rpkgs.datanovia.com/ggpubr/reference/ggmaplot.html
-        p = ggmaplot(
-            data=df, fdr = 0.05, 
-            fc = 1.5, #change barres horizontales
-            genenames = as.vector(dfGeneFile$name),
-            alpha = 1,
-            font.label = c(12, "plain", "black"),
-            label.rectangle = FALSE,
-            palette = c("#B31B21", "#1465AC", "darkgray"),
-            top = 15,
-            select.top.method = c("padj", "fc"),
-            label.select = NULL,
-            main = "MAPlot",
-            xlab = "Log2 mean expression",
-            ylab = "Log2 fold change")
-            ggtheme = ggplot2::theme_minimal()
-            #theme(plot.title = element_text(color="black", size=20, face="bold.italic", hjust = 0.5))
+        p = ggmaplot(data=df, 
+                     title = "MA plot",
+                     fdr = 0.05, #Accepted false discovery rate for considering genes as differentially expressed.
+                     size = 0.4,
+                     fc = fc_diff, #change barres horizontales par intervalle fc
+                     palette = c("red", "blue", "gray"),
+                     genenames = as.vector(df$GeneName),
+                     legend = "top", 
+                     top = 20,
+                     label.rectangle = TRUE,
+                     font.label = c("bold", 11),
+                     font.legend = c("bold", 11),
+                     font.title = c(size=20, face="bold.italic", "black"),
+                     ggtheme = ggplot2::theme_minimal()) #void
+        return(p)
     })
-    
     #variables
     output$plot_Volcano <- renderPlot(
         plotVolcano()
     )
     
     output$plot_MA <- renderPlot(
-        plot_MA()
+        plotMA()
     )
 
 
