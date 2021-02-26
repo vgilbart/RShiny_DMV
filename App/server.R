@@ -68,8 +68,8 @@ shinyServer(function(session, input, output) {
     observeEvent(input$method_choice, {
         if (input$method_choice == 2){
                 updateSliderInput(session, "pvalue", "Padj",
-                min = 0, max = 1,
-                value = 0.5)
+                                min = 0, max = 1,
+                                value = 0.5)
         }
         else if (input$method_choice == 1){
             updateSliderInput(session, "pvalue",  "Pvalue",
@@ -78,15 +78,27 @@ shinyServer(function(session, input, output) {
         }
     })
     
-    # Construction of Volcano plot
+    # volcano plot
     plotVolcano <- reactive({
         df=dfGeneFile()
+        if (input$method_choice == 2){
+            pvalue_choice <- df$padj
+            pval_for_plot <- "padj"
+        }
+        else if (input$method_choice == 1){
+            pvalue_choice <- df$pval
+            pval_for_plot <- "pval"
+        }
+        
+        # print(input$method_choice)
+        # print(df$pvalue_choice)
+        # print(df$pval)
         df$diffexpressed <- "NO regulated"
-        df$diffexpressed[df$log2FC > input$fold_change[2] & df$pval < -log10(input$pvalue)] <- "UP regulated"
-        df$diffexpressed[df$log2FC < input$fold_change[1] & df$pval < -log10(input$pvalue)] <- "DOWN regulated"
+        df$diffexpressed[df$log2FC > input$fold_change[2] & pvalue_choice < -log10(input$pvalue)] <- "UP regulated"
+        df$diffexpressed[df$log2FC < input$fold_change[1] & pvalue_choice < -log10(input$pvalue)] <- "DOWN regulated"
         mycolors <- c("blue", "gray", "red")
         
-        p = ggplot(data=df, aes(x=log2FC, y=-log10(pval), col=diffexpressed)) + 
+        p = ggplot(data=df, aes(x=log2FC, y=-log10(get(pval_for_plot)), col=diffexpressed)) + 
             geom_point() + 
             theme_minimal() + 
             ggtitle("Volcano Plot") + 

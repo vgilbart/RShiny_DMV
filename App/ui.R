@@ -20,7 +20,7 @@ shinyUI(navbarPage("Shiny DMV",
           # Input
           sidebarPanel(
               
-              # Select file (GeneName, GeneID, baseMean, log2FC, pval, adj) in TSV or CSV
+              # Select file (GeneName, GeneID, baseMean, log2FC, pval, padj) in TSV or CSV
               fileInput("gene_file", "Select a TSV or CSV File", 
                         accept = c("text/csv", 
                                    "text/comma-separated-values,text/plain",
@@ -71,10 +71,14 @@ shinyUI(navbarPage("Shiny DMV",
                           value = c(-1,1)),
           ),
           
-          # display of figures
+          # Plots
+          
           mainPanel(
-              plotOutput("plot_Volcano"),
-              plotOutput("plot_MA")
+              tabsetPanel(type = "tabs",
+                          tabPanel("volcano plot", plotOutput("plot_Volcano")),
+                          tabPanel("MA plot", plotOutput("plot_MA"))
+              ) 
+
           )
           
       ) # End of sidebarLayout
