@@ -127,7 +127,7 @@ shinyServer(function(session, input, output) {
             label.select = NULL,
             main = "MAPlot",
             xlab = "Log2 mean expression",
-            ylab = "Log2 fold change"),
+            ylab = "Log2 fold change")
             ggtheme = ggplot2::theme_minimal()
             #theme(plot.title = element_text(color="black", size=20, face="bold.italic", hjust = 0.5))
     })
