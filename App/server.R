@@ -143,6 +143,15 @@ shinyServer(function(session, input, output) {
                      ggtheme = ggplot2::theme_minimal()) #void
         return(p)
     })
+    
+    # data table diff_expression
+    
+    # dfExpressionFile =  reactive({
+    #     dfGeneFile()
+    #     dfExpression = df[df$log2FC > input$fold_change[2] & pvalue_choice < -log10(input$pvalue)]
+    #     return(dfExpression)
+    # })
+    
     #variables
     output$plot_Volcano <- renderPlot(
         plotVolcano()
@@ -152,6 +161,12 @@ shinyServer(function(session, input, output) {
         plotMA()
     )
 
+    # output$diff_expression_table <- renderDataTable(
+    #     dfExpressionFile(), 
+    #     options = list(pageLength = 5, # Number of rows of datatable 
+    #                    lengthMenu = c(5, 10, 25, 50) # Choice of number of rows
+    #                    )
+    # )
 
     #-- GO TERMS ENRICHMENT TAB
     
