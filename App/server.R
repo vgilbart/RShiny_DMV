@@ -8,7 +8,10 @@
 #
 
 library(shiny)
+library(clusterProfiler)
 library(ggplot2)
+library(biomaRt)
+library(org.Mm.eg.db)
 library(ggpubr)
 
 shinyServer(function(session, input, output) {
@@ -169,6 +172,65 @@ shinyServer(function(session, input, output) {
     # )
 
     #-- GO TERMS ENRICHMENT TAB
+    
+    dfGO <- reactive({
+        df = dfGeneFile()
+        level_GO = input$level_GO
+        method_GO = input$method_GO
+        proba_GO = input$proba_GO
+        
+
+        gene.df = bitr(df$GeneName, fromType = "SYMBOL", toType = c("ENTREZID","ENSEMBL", "SYMBOL"), OrgDb = org.Mm.eg.db)
+
+        # if method_GO = gsea
+        merged.df = merge(gene.df, df[, c("GeneName","log2FC")], by.x = "SYMBOL", by.y = "GeneName")[,c("ENTREZID","log2FC")]  
+        myGeneList = merged.df[,2]
+        names(myGeneList) = as.character(merged.df[,1])
+        myGeneList = myGeneList[!duplicated(names(myGeneList))] #Warning some genes are duplicated (have the same name, can't deal with that)
+        myGeneList = sort(myGeneList, decreasing = TRUE)
+        
+        df.enrich = gseGO(geneList = myGeneList,
+                    OrgDb = org.Mm.eg.db, 
+                    ont = level_GO, 
+                    keyType='ENTREZID',
+                    minGSSize    = 100,
+                    maxGSSize    = 500,
+                    pvalueCutoff = 0.05,
+                    verbose      = FALSE)
+
+        return(df.enrich)
+    })  
+    
+    
+    dotplotGO <- reactive({
+        level_GO = input$level_GO
+        method_GO = input$method_GO
+        proba_GO = input$proba_GO
+        df.enrich = dfGO()
+        
+        print(class(proba_GO))
+        var="pvalue"
+        print(class(var))
+        
+        dp = dotplot(df.enrich, showCategory=20, color=proba_GO) + 
+            ggtitle("Dot plot") + 
+            theme(plot.title = element_text(color="black", size=20, face="bold.italic", hjust = 0.5)) 
+            
+        return(dp)
+    })
+      
+
+    output$dotplot_GO <- renderPlot(
+        dotplotGO()
+    )    
+
+    output$table_GO <- renderDataTable(
+        summary(dfGO()), 
+        options = list(pageLength = 10, # Number of rows of datatable 
+                       lengthMenu = c(5, 10, 25, 50) # Choice of number of rows
+        )
+    )    
+    
     
     
     #-- PATHWAY ENRICHMENT TAB
